@@ -28,6 +28,8 @@ function love.update(dt)
 end
 
 function love.draw()
+    love.graphics.draw(sprites.sky, 0, 0)
+
     love.graphics.setColor(1, 0, 0)
     love.graphics.circle("fill", target.x, target.y, target.radius)
 
@@ -36,8 +38,8 @@ function love.draw()
     love.graphics.print(score, 0, 0)
     love.graphics.print(math.ceil(timer), 375, 0)
 
+    love.graphics.draw(sprites.target, target.x - target.radius, target.y - target.radius)
     love.graphics.draw(sprites.crosshairs, love.mouse.getX() -20, love.mouse.getY()-20 )
-    
 end
 
 function love.mousepressed( x, y, button, istouch, presses)
