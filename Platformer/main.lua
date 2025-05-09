@@ -4,7 +4,6 @@ function love.load()
     sprites = {}
     sprites.playerSheet = love.graphics.newImage('sprites/playersheet.png')
 
-
     local grid = anim8.newGrid(614, 564, sprites.playerSheet:getWidth(), sprites.playerSheet:getHeight())
 
     animations = {}
@@ -21,11 +20,7 @@ function love.load()
     world:addCollisionClass('Player'--[[, {ignores = {'Platform'}}]])
     world:addCollisionClass('Danger')
 
-
-    player = world:newRectangleCollider(360, 100, 80, 80, {collision_class = "Player"})
-    player:setFixedRotation(true)
-    player.speed = 240
-    player.animation = animations.run
+    require('player')
 
     platform = world:newRectangleCollider(250, 400, 300, 100, {collision_class = "Platform"})
     platform:setType('static')
@@ -36,33 +31,18 @@ end
 
 function love.update(dt)
     world:update(dt)
-
-    if player.body then 
-        local px, py = player:getPosition()
-        if love.keyboard.isDown('right')then 
-            player:setX(px + player.speed*dt)
-        end
-        if love.keyboard.isDown('left')then 
-            player:setX(px - player.speed*dt)
-        end
-        if player:enter('Danger') then
-            player:destroy()
-        end
-    end
-
-    player.animation:update(dt)
+    playerUpdate(dt)
 end
 
 function love.draw()
     world:draw()
-    player.animation:draw(sprites.playerSheet)
+    drawPlayer()
 end
 
 function love.keypressed(key)
-    if key == 'up' then 
-        local colliders = world:queryRectangleArea(player:getX() - 40, player:getY() + 40, 80, 2, {'Platform'})
-        if #colliders > 0 then
-            player:applyLinearImpulse(0, -7000)
+    if key == 'w' then 
+        if player.grounded then
+            player:applyLinearImpulse(0, -5000)
         end
     end
 end
