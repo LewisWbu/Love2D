@@ -13,11 +13,13 @@ function love.load()
 
 
     local grid = anim8.newGrid(614, 564, sprites.playerSheet:getWidth(), sprites.playerSheet:getHeight())
+    local enemyGrid = anim8.newGrid(100, 79, sprites.enemySheet:getWidth(), sprites.enemySheet:getHeight())
 
     animations = {}
     animations.idle = anim8.newAnimation(grid('1-15',1), 0.05)
     animations.jump = anim8.newAnimation(grid('1-7',2), 0.05)
     animations.run = anim8.newAnimation(grid('1-15',3), 0.05)
+    animations.enemy = anim8 .newAnimation(enemyGrid('1-2',1), 0.03)
 
 
     wf = require 'libary/windfield/windfield'
@@ -38,8 +40,6 @@ function love.load()
 
     loadMap()
 
-    spawnEnemy(960, 320)
-
 end
 
 function love.update(dt)
@@ -57,6 +57,7 @@ function love.draw()
         gameMap:drawLayer(gameMap.layers["Tile Layer 1"])
         world:draw()
         drawPlayer()
+        drawEnemies()
     cam:detach()
 end
 
@@ -89,6 +90,10 @@ function loadMap()
     gameMap = sti('maps/level1.lua')
     for i, obj in pairs(gameMap.layers["Platforms"].objects) do
         spawnPlatform(obj.x, obj.y, obj.width, obj.height)
+
+    end
+    for i, obj in pairs(gameMap.layers["Enemies"].objects) do
+        spawnEnemy(obj.x, obj.y)
 
     end
 end 

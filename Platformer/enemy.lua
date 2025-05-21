@@ -25,6 +25,7 @@ end
 function drawEnemies()
     for i,e in ipairs(enemies) do
         local ex, ey = e:getPosition()
+        e.animation:draw(sprites.enemySheet, ex, ey, nil, e.direction, 1, 50, 65)
     
     end 
 end
